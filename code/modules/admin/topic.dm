@@ -11,31 +11,31 @@
 			if("1")
 				log_admin("[key_name(usr)] has spawned a traitor.")
 				if(!src.makeTraitors())
-					usr << "\red Unfortunatly there were no candidates available"
+					usr << "\red Unfortunately there weren't enough candidates available."
 			if("2")
 				log_admin("[key_name(usr)] has spawned a changeling.")
 				if(!src.makeChanglings())
-					usr << "\red Unfortunatly there were no candidates available"
+					usr << "\red Unfortunately there weren't enough candidates available."
 			if("3")
 				log_admin("[key_name(usr)] has spawned revolutionaries.")
 				if(!src.makeRevs())
-					usr << "\red Unfortunatly there were no candidates available"
+					usr << "\red Unfortunately there weren't enough candidates available."
 			if("4")
 				log_admin("[key_name(usr)] has spawned a cultists.")
 				if(!src.makeCult())
-					usr << "\red Unfortunatly there were no candidates available"
+					usr << "\red Unfortunately there weren't enough candidates available."
 			if("5")
 				log_admin("[key_name(usr)] has spawned a malf AI.")
 				if(!src.makeMalfAImode())
-					usr << "\red Unfortunatly there were no candidates available"
+					usr << "\red Unfortunately there weren't enough candidates available."
 			if("6")
 				log_admin("[key_name(usr)] has spawned a wizard.")
 				if(!src.makeWizard())
-					usr << "\red Unfortunatly there were no candidates available"
+					usr << "\red Unfortunately there weren't enough candidates available."
 			if("7")
 				log_admin("[key_name(usr)] has spawned a nuke team.")
 				if(!src.makeNukeTeam())
-					usr << "\red Unfortunatly there were no candidates available"
+					usr << "\red Unfortunately there weren't enough candidates available."
 			if("8")
 				log_admin("[key_name(usr)] has spawned a ninja.")
 				src.makeSpaceNinja()
@@ -44,8 +44,10 @@
 				src.makeAliens()
 			if("10")
 				log_admin("[key_name(usr)] has spawned a death squad.")
-				if(!src.makeDeathsquad())
-					usr << "\red Unfortunatly there were no candidates available"
+			if("11")
+				log_admin("[key_name(usr)] has spawned vox raiders.")
+				if(!src.makeVoxRaiders())
+					usr << "\red Unfortunately there weren't enough candidates available."
 	else if(href_list["dbsearchckey"] || href_list["dbsearchadmin"])
 		var/adminckey = href_list["dbsearchadmin"]
 		var/playerckey = href_list["dbsearchckey"]
@@ -1690,6 +1692,12 @@
 					log_admin("[key_name(usr)] toggled gravity off.", 1)
 					message_admins("\blue [key_name_admin(usr)] toggled gravity off.", 1)
 					command_alert("Feedback surge detected in mass-distributions systems. Artifical gravity has been disabled whilst the system reinitializes. Further failures may result in a gravitational collapse and formation of blackholes. Have a nice day.")
+			if("wave")
+				feedback_inc("admin_secrets_fun_used",1)
+				feedback_add_details("admin_secrets_fun_used","Meteor")
+				log_admin("[key_name(usr)] spawned a meteor wave", 1)
+				message_admins("\blue [key_name_admin(usr)] spawned a meteor wave.", 1)
+				new /datum/event/meteor_wave
 			if("power")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","P")
@@ -2458,4 +2466,6 @@
 		switch(href_list["notes"])
 			if("show")
 				show_player_info(ckey)
+			if("list")
+				PlayerNotesPage(text2num(href_list["index"]))
 		return

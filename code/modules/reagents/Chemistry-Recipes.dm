@@ -501,7 +501,7 @@ datum
 			result = "virusfood"
 			required_reagents = list("water" = 5, "milk" = 5, "oxygen" = 5)
 			result_amount = 15
-
+/*
 		mix_virus
 			name = "Mix Virus"
 			id = "mixvirus"
@@ -539,7 +539,7 @@ datum
 						var/datum/disease/advance/D = locate(/datum/disease/advance) in B.data["viruses"]
 						if(D)
 							D.Devolve()
-
+*/
 		condensedcapsaicin
 			name = "Condensed Capsaicin"
 			id = "condensedcapsaicin"
@@ -1030,6 +1030,9 @@ datum
 					/mob/living/simple_animal/hostile/syndicate/ranged,
 					/mob/living/simple_animal/hostile/syndicate/ranged/space,
 					/mob/living/simple_animal/hostile/alien/queen/large,
+					/mob/living/simple_animal/hostile/faithless,
+					/mob/living/simple_animal/hostile/panther,
+					/mob/living/simple_animal/hostile/snake,
 					/mob/living/simple_animal/hostile/retaliate,
 					/mob/living/simple_animal/hostile/retaliate/clown
 					)//exclusion list for things you don't want the reaction to create.

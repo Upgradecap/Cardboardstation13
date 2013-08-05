@@ -217,7 +217,7 @@ datum/mind
 				text += "<b>OPERATIVE</b>|<a href='?src=\ref[src];nuclear=clear'>nanotrasen</a>"
 				text += "<br><a href='?src=\ref[src];nuclear=lair'>To shuttle</a>, <a href='?src=\ref[src];common=undress'>undress</a>, <a href='?src=\ref[src];nuclear=dressup'>dress up</a>."
 				var/code
-				for (var/obj/machinery/nuclearbomb/bombue in world)
+				for (var/obj/machinery/nuclearbomb/bombue in machines)
 					if (length(bombue.r_code) <= 5 && bombue.r_code != "LOLNO" && bombue.r_code != "ADMIN")
 						code = bombue.r_code
 						break
@@ -370,13 +370,13 @@ datum/mind
 				if(!def_value)//If it's a custom objective, it will be an empty string.
 					def_value = "custom"
 
-			var/new_obj_type = input("Select objective type:", "Objective type", def_value) as null|anything in list("assassinate", "debrain", "protect", "prevent", "hijack", "escape", "survive", "steal", "download", "nuclear", "capture", "absorb", "custom")
+			var/new_obj_type = input("Select objective type:", "Objective type", def_value) as null|anything in list("assassinate", "debrain", "protect", "prevent", "harm", "brig", "hijack", "escape", "survive", "steal", "download", "nuclear", "capture", "absorb", "custom")
 			if (!new_obj_type) return
 
 			var/datum/objective/new_objective = null
 
 			switch (new_obj_type)
-				if ("assassinate","protect","debrain")
+				if ("assassinate","protect","debrain", "harm", "brig")
 					//To determine what to name the objective in explanation text.
 					var/objective_type_capital = uppertext(copytext(new_obj_type, 1,2))//Capitalize first letter.
 					var/objective_type_text = copytext(new_obj_type, 2)//Leave the rest of the text.
@@ -719,7 +719,7 @@ datum/mind
 						usr << "\red Equipping a syndicate failed!"
 				if("tellcode")
 					var/code
-					for (var/obj/machinery/nuclearbomb/bombue in world)
+					for (var/obj/machinery/nuclearbomb/bombue in machines)
 						if (length(bombue.r_code) <= 5 && bombue.r_code != "LOLNO" && bombue.r_code != "ADMIN")
 							code = bombue.r_code
 							break
@@ -1220,5 +1220,9 @@ datum/mind
 	mind.assigned_role = "Juggernaut"
 	mind.special_role = "Cultist"
 
+/mob/living/simple_animal/vox/armalis/mind_initialize()
+	..()
+	mind.assigned_role = "Armalis"
+	mind.special_role = "Vox Raider"
 
 

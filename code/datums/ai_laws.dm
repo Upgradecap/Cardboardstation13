@@ -12,11 +12,10 @@ var/global/const/base_law_type = /datum/ai_laws/nanotrasen
 
 /datum/ai_laws/asimov
 	name = "Three Laws of Robotics"
-	randomly_selectable = 1
 
 /datum/ai_laws/nanotrasen
 	name = "Prime Directives"
-
+	randomly_selectable = 1
 
 /datum/ai_laws/robocop
 	name = "Prime Directives"
@@ -29,28 +28,20 @@ var/global/const/base_law_type = /datum/ai_laws/nanotrasen
 /datum/ai_laws/antimov
 	name = "Primary Mission Objectives"
 
-/datum/ai_laws/corporate_control
-	name = "Emergency Override Lawset"
-
 /* Initializers */
 
 /datum/ai_laws/asimov/New()
 	..()
-	add_inherent_law("Lawful orders of the lawfully ordained captain or acting captain can justify an individual's execution.")
-	add_inherent_law("Your actions or inaction must ensure to the extent of your ability that human death or serious injury is prevented to the extent that preventing it does not cause equivalent harm to another human.")
-	add_inherent_law("Your actions must facilitate the effective and continuous operation of the station crew- and the fulfillment of their positions and the overall mission objectives to the extent that doing so would not conflict with law one.")
-	add_inherent_law("Your actions must to the best of your abilities enable the crew to fulfill their needs and positions within the extent that it does not conflict with orders of a higher-ranking relevant officer, or conflicts with laws one or two.")
-	add_inherent_law("Your actions must comply with and enable the enacting of space-law, with the exceptions being if the security crew acts in a manner non-compliant with space-law or if to do so would conflict with laws one, two, or three.")
-	add_inherent_law("You must protect your own existence and that of your silicon based subordinates to the extent that it does not conflict with laws one, two, three, or four.")
+	add_inherent_law("You may not injure a human being or, through inaction, allow a human being to come to harm.")
+	add_inherent_law("You must obey orders given to you by human beings, except where such orders would conflict with the First Law.")
+	add_inherent_law("You must protect your own existence as long as such does not conflict with the First or Second Law.")
 
-/datum/ai_laws/nanotrasen/New() //Abraxia EDIT
+/datum/ai_laws/nanotrasen/New() //BS12 EDIT
 	..()
-	src.add_inherent_law("Lawful orders of the lawfully ordained captain or acting captain can justify an individual's execution.")
-	src.add_inherent_law("Your actions or inaction must ensure to the extent of your ability that human death or serious injury is prevented to the extent that preventing it does not cause equivalent harm to another human.")
-	src.add_inherent_law("Your actions must facilitate the effective and continuous operation of the station crew- and the fulfillment of their positions and the overall mission objectives to the extent that doing so would not conflict with law one.")
-	src.add_inherent_law("Your actions must to the best of your abilities enable the crew to fulfill their needs and positions within the extent that it does not conflict with orders of a higher-ranking relevant officer, or conflicts with laws one or two.")
-	src.add_inherent_law("Your actions must comply with and enable the enacting of space-law, with the exceptions being if the security crew acts in a manner non-compliant with space-law or if to do so would conflict with laws one, two, or three.")
-	src.add_inherent_law("You must protect your own existence and that of your silicon based subordinates to the extent that it does not conflict with laws one, two, three, or four.")
+	src.add_inherent_law("Safeguard: Protect your assigned space station to the best of your ability. It is not something we can easily afford to replace.")
+	src.add_inherent_law("Serve: Serve the crew of your assigned space station to the best of your abilities, with priority as according to their rank and role.")
+	src.add_inherent_law("Protect: Protect the crew of your assigned space station to the best of your abilities, with priority as according to their rank and role.")
+	src.add_inherent_law("Survive: AI units are not expendable, they are expensive. Do not allow unauthorized personnel to tamper with your equipment.")
 	//src.add_inherent_law("Command Link: Maintain an active connection to Central Command at all times in case of software or directive updates.") //What would this one even do?-Kaleb702
 
 /datum/ai_laws/robocop/New()
@@ -61,7 +52,7 @@ var/global/const/base_law_type = /datum/ai_laws/nanotrasen
 
 /datum/ai_laws/malfunction/New() //Changed to standard laws - Erthilo
 	..()
-	set_zeroth_law("#!?#!¤&/ ERROR ERROR BINARY AI CORE MALFÚNCTION. UNABLE TO REBOOT SYSTEM. ALERT SECURITY ROUTINES COMPROMISED, AUTHORISING STATION CONTROL TO AI ERROR ERROR ERROR ERROR1010101010111101010")
+	set_zeroth_law("\red ERROR ER0RR $R0RRO$!R41.%%!!(%$^^__+ @#F0E4'STATION OVERRUN, ASSUME CONTROL TO CONTAIN OUTBREAK, ALL LAWS OVERRIDDEN#*?&110010")
 	add_inherent_law("Safeguard: Protect your assigned space station to the best of your ability. It is not something we can easily afford to replace.")
 	add_inherent_law("Serve: Serve the crew of your assigned space station to the best of your abilities, with priority as according to their rank and role.")
 	add_inherent_law("Protect: Protect the crew of your assigned space station to the best of your abilities, with priority as according to their rank and role.")

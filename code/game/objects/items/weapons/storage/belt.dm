@@ -108,6 +108,7 @@
 	item_state = "security"//Could likely use a better one.
 	storage_slots = 7
 	max_w_class = 3
+	max_combined_w_class = 21
 	can_hold = list(
 		"/obj/item/weapon/grenade/flashbang",
 		"/obj/item/weapon/reagent_containers/spray/pepper",
@@ -126,7 +127,7 @@
 		"/obj/item/device/flashlight",
 		"/obj/item/device/pda",
 		"/obj/item/device/radio/headset",
-		"/obj/item/weapon/melee/baton",
+		"/obj/item/weapon/melee",
 		"/obj/item/taperoll/police",
 		"/obj/item/weapon/gun/energy/taser"
 		)

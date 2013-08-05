@@ -51,7 +51,8 @@ datum/controller/game_controller/New()
 datum/controller/game_controller/proc/setup()
 	world.tick_lag = config.Ticklag
 
-	createRandomZlevel()
+	spawn(20)
+		createRandomZlevel()
 
 	if(!air_master)
 		air_master = new /datum/controller/air_system()
@@ -83,12 +84,12 @@ datum/controller/game_controller/proc/setup_objects()
 
 	world << "\red \b Initializing pipe networks"
 	sleep(-1)
-	for(var/obj/machinery/atmospherics/machine in world)
+	for(var/obj/machinery/atmospherics/machine in machines)
 		machine.build_network()
 
 	world << "\red \b Initializing atmos machinery."
 	sleep(-1)
-	for(var/obj/machinery/atmospherics/unary/U in world)
+	for(var/obj/machinery/atmospherics/unary/U in machines)
 		if(istype(U, /obj/machinery/atmospherics/unary/vent_pump))
 			var/obj/machinery/atmospherics/unary/vent_pump/T = U
 			T.broadcast_status()
@@ -131,12 +132,12 @@ datum/controller/game_controller/proc/process()
 					//src.set_debug_state("Air Master")
 
 					air_master.current_cycle++
-					var/success = air_master.tick() //Changed so that a runtime does not crash the ticker.
-					if(!success) //Runtimed.
+					if(!air_master.tick()) //Runtimed.
 						air_master.failed_ticks++
 						if(air_master.failed_ticks > 5)
 							world << "<font color='red'><b>RUNTIMES IN ATMOS TICKER.  Killing air simulation!</font></b>"
-							message_admins("ZASALERT: unable run [air_master.tick_progress], tell someone about this!")
+							world.log << "### ZAS SHUTDOWN"
+							message_admins("ZASALERT: unable to run [air_master.tick_progress], shutting down!")
 							log_admin("ZASALERT: unable run zone/process() -- [air_master.tick_progress]")
 							air_processing_killed = 1
 							air_master.failed_ticks = 0

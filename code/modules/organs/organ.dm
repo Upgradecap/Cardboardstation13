@@ -11,6 +11,9 @@
 	proc/receive_chem(chemical as obj)
 		return 0
 
+/datum/organ/proc/get_icon()
+	return icon('icons/mob/human.dmi',"blank")
+
 //Handles chem traces
 /mob/living/carbon/human/proc/handle_trace_chems()
 	//New are added for reagents to random organs.
@@ -80,6 +83,13 @@
 		if(E.status & ORGAN_BROKEN && !(E.status & ORGAN_SPLINTED && prob(10)) )
 			broken = 1
 
+		//Moving around with fractured ribs won't do you any good
+		if (broken && E.internal_organs && prob(15))
+			if (!lying && world.timeofday - l_move_time < 15)
+				var/datum/organ/internal/I = pick(E.internal_organs)
+				custom_pain("You feel broken bones moving in your [E.display_name]!", 1)
+				I.take_damage(rand(3,5))
+
 		//Special effects for limbs.
 		if(E.name in list("l_hand","l_arm","r_hand","r_arm"))
 			var/obj/item/c_hand		//Getting what's in this hand
@@ -104,7 +114,7 @@
 						del(spark_system)
 
 		else if(E.name in list("l_leg","l_foot","r_leg","r_foot") && !lying)
-			if (E.status & ORGAN_DESTROYED || malfunction || (broken && !(E.status & ORGAN_SPLINTED)))
+			if (!E.is_usable() || malfunction || (broken && !(E.status & ORGAN_SPLINTED)))
 				leg_tally--			// let it fail even if just foot&leg
 
 	// standing is poor

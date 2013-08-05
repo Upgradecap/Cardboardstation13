@@ -54,8 +54,8 @@
 		var/datum/organ/external/temp = M:organs_by_name["r_hand"]
 		if (M.hand)
 			temp = M:organs_by_name["l_hand"]
-		if(temp && temp.status & ORGAN_DESTROYED)
-			M << "\red Yo- wait a minute."
+		if(temp && !temp.is_usable())
+			M << "\red You can't use your [temp.display_name]"
 			return
 
 	for(var/datum/disease/D in viruses)
@@ -75,14 +75,6 @@
 
 /mob/living/carbon/attack_paw(mob/M as mob)
 	if(!istype(M, /mob/living/carbon)) return
-
-	if (hasorgans(M))
-		var/datum/organ/external/temp = M:organs_by_name["r_hand"]
-		if (M.hand)
-			temp = M:organs_by_name["l_hand"]
-		if(temp && temp.status & ORGAN_DESTROYED)
-			M << "\red Yo- wait a minute."
-			return
 
 	for(var/datum/disease/D in viruses)
 
@@ -187,6 +179,8 @@
 					status += "numb"
 				if(org.status & ORGAN_DESTROYED)
 					status = "MISSING!"
+				if(org.status & ORGAN_MUTATED)
+					status = "weirdly shapen."
 				if(status == "")
 					status = "OK"
 				src.show_message(text("\t []My [] is [].",status=="OK"?"\blue ":"\red ",org.display_name,status),1)
@@ -386,7 +380,7 @@
 	u_equip(item)
 	update_icons()
 
-	if (istype(usr, /mob/living/carbon/monkey)) //Check if a monkey is throwing. Modify/remove this line as required.
+	if (istype(usr, /mob/living/carbon)) //Check if a carbon mob is throwing. Modify/remove this line as required.
 		item.loc = src.loc
 		if(src.client)
 			src.client.screen -= item
@@ -462,3 +456,25 @@
 	user << browse(dat, text("window=mob[];size=325x500", name))
 	onclose(user, "mob[name]")
 	return
+
+//generates realistic-ish pulse output based on preset levels
+/mob/living/carbon/proc/get_pulse(var/method)	//method 0 is for hands, 1 is for machines, more accurate
+	var/temp = 0								//see setup.dm:694
+	switch(src.pulse)
+		if(PULSE_NONE)
+			return "0"
+		if(PULSE_SLOW)
+			temp = rand(40, 60)
+			return num2text(method ? temp : temp + rand(-10, 10))
+		if(PULSE_NORM)
+			temp = rand(60, 90)
+			return num2text(method ? temp : temp + rand(-10, 10))
+		if(PULSE_FAST)
+			temp = rand(90, 120)
+			return num2text(method ? temp : temp + rand(-10, 10))
+		if(PULSE_2FAST)
+			temp = rand(120, 160)
+			return num2text(method ? temp : temp + rand(-10, 10))
+		if(PULSE_THREADY)
+			return method ? ">250" : "extremely weak and fast, patient's artery feels like a thread"
+//			output for machines^	^^^^^^^output for people^^^^^^^^^
