@@ -199,29 +199,19 @@
 	var/distance = get_dist(usr,src)
 	if(istype(usr, /mob/dead/observer) || usr.stat == 2) // ghosts can see anything
 		distance = 1
-	if (src.stat == 1 || stat == 2)
+	if (src.stat)
 		msg += "<span class='warning'>[t_He] [t_is]n't responding to anything around [t_him] and seems to be asleep.</span>\n"
 		if((stat == 2 || src.health < config.health_threshold_crit) && distance <= 3)
 			msg += "<span class='warning'>[t_He] does not appear to be breathing.</span>\n"
-		if(istype(usr, /mob/living/carbon/human) && usr.stat == 0 && src.stat == 1 && distance <= 1)
+		if(istype(usr, /mob/living/carbon/human) && !usr.stat && distance <= 1)
 			for(var/mob/O in viewers(usr.loc, null))
 				O.show_message("[usr] checks [src]'s pulse.", 1)
-			spawn(15)
-				usr << "\blue [t_He] has a pulse!"
-
-	if (src.stat == 2 || (status_flags & FAKEDEATH))
-		if(distance <= 1)
-			if(istype(usr, /mob/living/carbon/human) && usr.stat == 0)
-				for(var/mob/O in viewers(usr.loc, null))
-					O.show_message("[usr] checks [src]'s pulse.", 1)
-			spawn(15)
-				var/foundghost = 0
-				if(src.client)
-					foundghost = 1
-				if(!foundghost)
-					usr << "<span class='deadsay'>[t_He] has no pulse and [t_his] soul has departed...</span>"
+		spawn(15)
+			if(distance <= 1 && usr.stat != 1)
+				if(pulse == PULSE_NONE)
+					usr << "<span class='deadsay'>[t_He] has no pulse[src.client ? "" : " and [t_his] soul has departed"]...</span>"
 				else
-					usr << "<span class='deadsay'>[t_He] has no pulse...</span>"
+					usr << "<span class='deadsay'>[t_He] has a pulse!</span>"
 
 	msg += "<span class='warning'>"
 
@@ -381,65 +371,56 @@
 	if(display_gloves)
 		msg += "<span class='warning'><b>[src] has blood running from under [t_his] gloves!</b></span>\n"
 
-
+	for(var/implant in get_visible_implants(1))
+		msg += "<span class='warning'><b>[src] has \a [implant] sticking out of their flesh!</span>\n"
 	if(digitalcamo)
 		msg += "[t_He] [t_is] repulsively uncanny!\n"
 
 
-	if(istype(usr, /mob/living/carbon/human))
-		var/mob/living/carbon/human/H = usr
-		if(istype(H.glasses, /obj/item/clothing/glasses/hud/security) || istype(H.glasses, /obj/item/clothing/glasses/sunglasses/sechud))
-			if(usr.stat ||  H != usr) //|| !usr.canmove || usr.restrained()) Fluff: Sechuds have eye-tracking technology and sets 'arrest' to people that the wearer looks and blinks at.
-				return													  //Non-fluff: This allows sec to set people to arrest as they get disarmed or beaten
+	if(hasHUD(usr,"security"))
+		var/perpname = "wot"
+		var/criminal = "None"
 
-			var/perpname = "wot"
-			var/criminal = "None"
-
-			if(wear_id)
-				var/obj/item/weapon/card/id/I = wear_id.GetID()
-				if(I)
-					perpname = I.registered_name
-				else
-					perpname = name
+		if(wear_id)
+			var/obj/item/weapon/card/id/I = wear_id.GetID()
+			if(I)
+				perpname = I.registered_name
 			else
 				perpname = name
+		else
+			perpname = name
 
-			if(perpname)
-				for (var/datum/data/record/E in data_core.general)
-					if(E.fields["name"] == perpname)
-						for (var/datum/data/record/R in data_core.security)
-							if(R.fields["id"] == E.fields["id"])
-								criminal = R.fields["criminal"]
-
-
-				msg += "<span class = 'deptradio'>Criminal status:</span> <a href='?src=\ref[src];criminal=1'>\[[criminal]\]</a>\n"
-				msg += "<span class = 'deptradio'>Security records:</span> <a href='?src=\ref[src];secrecord=`'>\[View\]</a>  <a href='?src=\ref[src];secrecordadd=`'>\[Add comment\]</a>\n"
-				//msg += "\[Set Hostile Identification\]\n"
-
-	if(istype(usr, /mob/living/carbon/human))
-		var/mob/living/carbon/human/H = usr
-		if(istype(H.glasses, /obj/item/clothing/glasses/hud/health))
-			var/perpname = "wot"
-			var/medical = "None"
-
-			if(wear_id)
-				if(istype(wear_id,/obj/item/weapon/card/id))
-					perpname = wear_id:registered_name
-				else if(istype(wear_id,/obj/item/device/pda))
-					var/obj/item/device/pda/tempPda = wear_id
-					perpname = tempPda.owner
-			else
-				perpname = src.name
-
+		if(perpname)
 			for (var/datum/data/record/E in data_core.general)
-				if (E.fields["name"] == perpname)
-					for (var/datum/data/record/R in data_core.general)
-						if (R.fields["id"] == E.fields["id"])
-							medical = R.fields["p_stat"]
+				if(E.fields["name"] == perpname)
+					for (var/datum/data/record/R in data_core.security)
+						if(R.fields["id"] == E.fields["id"])
+							criminal = R.fields["criminal"]
 
+			msg += "<span class = 'deptradio'>Criminal status:</span> <a href='?src=\ref[src];criminal=1'>\[[criminal]\]</a>\n"
+			msg += "<span class = 'deptradio'>Security records:</span> <a href='?src=\ref[src];secrecord=`'>\[View\]</a>  <a href='?src=\ref[src];secrecordadd=`'>\[Add comment\]</a>\n"
 
-			msg += "<span class = 'deptradio'>Physical status:</span> <a href='?src=\ref[src];medical=1'>\[[medical]\]</a>\n"
-			msg += "<span class = 'deptradio'>Medical records:</span> <a href='?src=\ref[src];medrecord=`'>\[View\]</a> <a href='?src=\ref[src];medrecordadd=`'>\[Add comment\]</a>\n"
+	if(hasHUD(usr,"medical"))
+		var/perpname = "wot"
+		var/medical = "None"
+
+		if(wear_id)
+			if(istype(wear_id,/obj/item/weapon/card/id))
+				perpname = wear_id:registered_name
+			else if(istype(wear_id,/obj/item/device/pda))
+				var/obj/item/device/pda/tempPda = wear_id
+				perpname = tempPda.owner
+		else
+			perpname = src.name
+
+		for (var/datum/data/record/E in data_core.general)
+			if (E.fields["name"] == perpname)
+				for (var/datum/data/record/R in data_core.general)
+					if (R.fields["id"] == E.fields["id"])
+						medical = R.fields["p_stat"]
+
+		msg += "<span class = 'deptradio'>Physical status:</span> <a href='?src=\ref[src];medical=1'>\[[medical]\]</a>\n"
+		msg += "<span class = 'deptradio'>Medical records:</span> <a href='?src=\ref[src];medrecord=`'>\[View\]</a> <a href='?src=\ref[src];medrecordadd=`'>\[Add comment\]</a>\n"
 
 
 	if(print_flavor_text()) msg += "[print_flavor_text()]\n"
@@ -451,3 +432,26 @@
 		msg += "\n[t_He] is [pose]"
 
 	usr << msg
+
+//Helper procedure. Called by /mob/living/carbon/human/examine() and /mob/living/carbon/human/Topic() to determine HUD access to security and medical records.
+/proc/hasHUD(mob/M as mob, hudtype)
+	if(istype(M, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = M
+		switch(hudtype)
+			if("security")
+				return istype(H.glasses, /obj/item/clothing/glasses/hud/security) || istype(H.glasses, /obj/item/clothing/glasses/sunglasses/sechud)
+			if("medical")
+				return istype(H.glasses, /obj/item/clothing/glasses/hud/health)
+			else
+				return 0
+	else if(istype(M, /mob/living/silicon/robot))
+		var/mob/living/silicon/robot/R = M
+		switch(hudtype)
+			if("security")
+				return istype(R.module_state_1, /obj/item/borg/sight/hud/sec) || istype(R.module_state_2, /obj/item/borg/sight/hud/sec) || istype(R.module_state_3, /obj/item/borg/sight/hud/sec)
+			if("medical")
+				return istype(R.module_state_1, /obj/item/borg/sight/hud/med) || istype(R.module_state_2, /obj/item/borg/sight/hud/med) || istype(R.module_state_3, /obj/item/borg/sight/hud/med)
+			else
+				return 0
+	else
+		return 0

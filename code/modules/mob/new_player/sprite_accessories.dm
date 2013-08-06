@@ -306,7 +306,7 @@
 		name = "Shaved"
 		icon_state = "bald"
 		gender = NEUTER
-		species_allowed = list("Human","Unathi","Tajaran","Skrell")
+		species_allowed = list("Human","Unathi","Tajaran","Skrell","Vox")
 
 	watson
 		name = "Watson Mustache"
@@ -484,7 +484,7 @@
 		species_allowed = list("Tajaran")
 
 	taj_ears_spiky
-		name = "Tajara  Spiky"
+		name = "Tajara Spiky"
 		icon_state = "hair_tajspiky"
 		species_allowed = list("Tajaran")
 
@@ -492,6 +492,11 @@
 		name = "Tajara Messy"
 		icon_state = "hair_messy"
 		species_allowed = list("Tajaran")
+
+	vox_quills_short
+		name = "Short Vox Quills"
+		icon_state = "vox_shortquills"
+		species_allowed = list("Vox")
 
 /datum/sprite_accessory/facial_hair
 

@@ -50,7 +50,7 @@ rcd light flash thingy on matter drain
 	set name = "Upgrade Turrets"
 	usr.verbs -= /client/proc/upgrade_turrets
 	for(var/obj/machinery/turret/turret in player_list)
-		turret.health += 50
+		turret.health += 30
 		turret.shot_delay = 20
 
 /datum/AI_Module/large/disable_rcd
@@ -73,7 +73,7 @@ rcd light flash thingy on matter drain
 /datum/AI_Module/small/overload_machine
 	module_name = "Machine overload"
 	mod_pick_name = "overload"
-	uses = 10
+	uses = 2
 
 /client/proc/overload_machine(obj/machinery/M as obj in world)
 	set name = "Overload Machine"
@@ -85,7 +85,7 @@ rcd light flash thingy on matter drain
 				for(var/mob/V in hearers(M, null))
 					V.show_message("\blue You hear a loud electrical buzzing sound!", 2)
 				spawn(50)
-					explosion(get_turf(M), 0,1,1,0)
+					explosion(get_turf(M), 0,1,2,3)
 					del(M)
 			else usr << "Out of uses."
 	else usr << "That's not a machine."
@@ -93,7 +93,7 @@ rcd light flash thingy on matter drain
 /datum/AI_Module/small/blackout
 	module_name = "Blackout"
 	mod_pick_name = "blackout"
-	uses = 10
+	uses = 3
 
 /client/proc/blackout()
 	set category = "Malfunction"
@@ -181,7 +181,7 @@ rcd light flash thingy on matter drain
 
 /datum/AI_Module/module_picker
 	var/temp = null
-	var/processing_time = 200
+	var/processing_time = 100
 	var/list/possible_modules = list()
 
 /datum/AI_Module/module_picker/New()
@@ -226,7 +226,7 @@ rcd light flash thingy on matter drain
 			usr.verbs += /client/proc/fireproof_core
 			usr:current_modules += new /datum/AI_Module/large/fireproof_core
 			src.temp = "An upgrade to improve core resistance, making it immune to fire and heat. This effect is permanent."
-			src.processing_time -= 15
+			src.processing_time -= 50
 		else src.temp = "This module is only needed once."
 
 	else if (href_list["turret"])
@@ -238,7 +238,7 @@ rcd light flash thingy on matter drain
 			usr.verbs += /client/proc/upgrade_turrets
 			usr:current_modules += new /datum/AI_Module/large/upgrade_turrets
 			src.temp = "Improves the firing speed and health of all AI turrets. This effect is permanent."
-			src.processing_time -= 35
+			src.processing_time -= 50
 		else src.temp = "This module is only needed once."
 
 	else if (href_list["rcd"])
@@ -252,7 +252,7 @@ rcd light flash thingy on matter drain
 			usr.verbs += /client/proc/disable_rcd
 			src.temp = 	"Send a specialised pulse to break all RCD devices on the station."
 		else src.temp = "Additional use added to RCD disabler."
-		src.processing_time -= 40
+		src.processing_time -= 50
 
 	else if (href_list["overload"])
 		var/already
@@ -265,7 +265,7 @@ rcd light flash thingy on matter drain
 			usr:current_modules += new /datum/AI_Module/small/overload_machine
 			src.temp = "Overloads an electrical machine, causing a small explosion. 2 uses."
 		else src.temp = "Two additional uses added to Overload module."
-		src.processing_time -= 20
+		src.processing_time -= 15
 
 	else if (href_list["blackout"])
 		var/already
@@ -278,7 +278,7 @@ rcd light flash thingy on matter drain
 			src.temp = "Attempts to overload the lighting circuits on the station, destroying some bulbs. 3 uses."
 			usr:current_modules += new /datum/AI_Module/small/blackout
 		else src.temp = "Three additional uses added to Blackout module."
-		src.processing_time -= 20
+		src.processing_time -= 15
 
 	else if (href_list["interhack"])
 		var/already
@@ -289,7 +289,7 @@ rcd light flash thingy on matter drain
 			usr.verbs += /client/proc/interhack
 			src.temp = "Hacks the status upgrade from Cent. Com, removing any information about malfunctioning electrical systems."
 			usr:current_modules += new /datum/AI_Module/small/interhack
-			src.processing_time -= 10
+			src.processing_time -= 15
 		else src.temp = "This module is only needed once."
 
 	else if (href_list["recam"])

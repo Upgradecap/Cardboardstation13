@@ -175,8 +175,7 @@ var/MAX_EXPLOSION_RANGE = 14
 
 //FLAGS BITMASK
 #define STOPSPRESSUREDMAGE 1	//This flag is used on the flags variable for SUIT and HEAD items which stop pressure damage. Note that the flag 1 was previous used as ONBACK, so it is possible for some code to use (flags & 1) when checking if something can be put on your back. Replace this code with (inv_flags & SLOT_BACK) if you see it anywhere
-//To successfully stop you taking all pressure damage you must have both a suit and head item with this flag.
-
+                                //To successfully stop you taking all pressure damage you must have both a suit and head item with this flag.
 #define TABLEPASS 2			// can pass by a table or rack
 
 #define MASKINTERNALS	8	// mask allows internals
@@ -205,7 +204,8 @@ var/MAX_EXPLOSION_RANGE = 14
 
 #define	NOREACT		16384 			//Reagents dont' react inside this container.
 
-#define BLOCKHAIR	32768			// temporarily removes the user's hair icon
+#define BLOCKHEADHAIR 4             // temporarily removes the user's hair overlay. Leaves facial hair.
+#define BLOCKHAIR	32768			// temporarily removes the user's hair, facial and otherwise.
 
 //flags for pass_flags
 #define PASSTABLE	1
@@ -427,6 +427,7 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define WEAKEN		"weaken"
 #define PARALYZE	"paralize"
 #define IRRADIATE	"irradiate"
+#define AGONY		"agony" // Added in PAIN!
 #define STUTTER		"stutter"
 #define EYE_BLUR	"eye_blur"
 #define DROWSY		"drowsy"
@@ -583,6 +584,7 @@ var/list/TAGGERLOCATIONS = list("Disposals",
 #define ORGAN_SPLINTED 256
 #define SALVED 512
 #define ORGAN_DEAD 1024
+#define ORGAN_MUTATED 2048
 
 #define ROUNDSTART_LOGOUT_REPORT_TIME 6000 //Amount of time (in deciseconds) after the rounds starts, that the player disconnect report is issued.
 
@@ -622,9 +624,10 @@ var/list/TAGGERLOCATIONS = list("Disposals",
 #define CHAT_RADIO		512
 #define CHAT_ATTACKLOGS	1024
 #define CHAT_DEBUGLOGS	2048
+#define CHAT_LOOC		4096
 
 
-#define TOGGLES_DEFAULT (SOUND_ADMINHELP|SOUND_MIDI|SOUND_AMBIENCE|SOUND_LOBBY|CHAT_OOC|CHAT_DEAD|CHAT_GHOSTEARS|CHAT_GHOSTSIGHT|CHAT_PRAYER|CHAT_RADIO|CHAT_ATTACKLOGS)
+#define TOGGLES_DEFAULT (SOUND_ADMINHELP|SOUND_MIDI|SOUND_AMBIENCE|SOUND_LOBBY|CHAT_OOC|CHAT_DEAD|CHAT_GHOSTEARS|CHAT_GHOSTSIGHT|CHAT_PRAYER|CHAT_RADIO|CHAT_ATTACKLOGS|CHAT_LOOC)
 
 #define BE_TRAITOR		1
 #define BE_OPERATIVE	2
@@ -667,3 +670,27 @@ var/list/be_special_flags = list(
 
 #define LEFT 1
 #define RIGHT 2
+
+// for secHUDs and medHUDs and variants. The number is the location of the image on the list hud_list of humans.
+#define HEALTH_HUD		1 // dead, alive, sick, health status
+#define STATUS_HUD		2 // a simple line rounding the mob's number health
+#define ID_HUD			3 // the job asigned to your ID
+#define WANTED_HUD		4 // wanted, released, parroled, security status
+#define IMPLOYAL_HUD	5 // loyality implant
+#define IMPCHEM_HUD		6 // chemical implant
+#define IMPTRACK_HUD	7 // tracking implant
+
+//Pulse levels, very simplified
+#define PULSE_NONE		0	//so !M.pulse checks would be possible
+#define PULSE_SLOW		1	//<60 bpm
+#define PULSE_NORM		2	//60-90 bpm
+#define PULSE_FAST		3	//90-120 bpm
+#define PULSE_2FAST		4	//>120 bpm
+#define PULSE_THREADY	5	//occurs during hypovolemic shock
+//feel free to add shit to lists below
+var/list/tachycardics = list("coffee", "inaprovaline", "hyperzine", "nitroglycerin", "thirteenloko", "nicotine")	//increase heart rate
+var/list/bradycardics = list("neurotoxin", "cryoxadone", "clonexadone", "space_drugs", "stoxin")					//decrease heart rate
+
+//proc/get_pulse methods
+#define GETPULSE_HAND	0	//less accurate (hand)
+#define GETPULSE_TOOL	1	//more accurate (med scanner, sleeper, etc)

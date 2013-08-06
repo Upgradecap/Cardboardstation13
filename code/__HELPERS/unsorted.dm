@@ -780,7 +780,7 @@ proc/anim(turf/location as turf,target as mob|obj,a_icon,a_icon_state as text,fl
 		return 0
 
 	var/delayfraction = round(delay/numticks)
-	var/turf/T = user.loc
+	var/turf/T = get_turf(user)
 	var/holding = user.get_active_hand()
 
 	for(var/i = 0, i<numticks, i++)
@@ -1198,7 +1198,7 @@ proc/oview_or_orange(distance = world.view , center = usr , type)
 
 proc/get_mob_with_client_list()
 	var/list/mobs = list()
-	for(var/mob/M in world)
+	for(var/mob/M in mob_list)
 		if (M.client)
 			mobs += M
 	return mobs

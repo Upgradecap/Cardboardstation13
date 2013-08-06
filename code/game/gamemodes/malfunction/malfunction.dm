@@ -5,7 +5,7 @@
 	name = "AI malfunction"
 	config_tag = "malfunction"
 	required_players = 2
-	required_players_secret = 7
+	required_players_secret = 15
 	required_enemies = 1
 	recommended_enemies = 1
 
@@ -216,12 +216,12 @@
 	else if ( station_captured &&  malf_dead && !station_was_nuked)
 		feedback_set_details("round_end_result","halfwin - AI killed, staff lost control")
 		world << "<FONT size = 3><B>Neutral Victory</B></FONT>"
-		world << "<B>The AI has been killed!</B> The staff has lost control over the station."
+		world << "<B>The AI has been killed!</B> The staff has lose control over the station."
 
 	else if ( station_captured && !malf_dead && !station_was_nuked)
 		feedback_set_details("round_end_result","win - AI win - no explosion")
 		world << "<FONT size = 3><B>AI Victory</B></FONT>"
-		world << "<B>The AI has chosen not to blow you all up!</B>"
+		world << "<B>The AI has chosen not to explode you all!</B>"
 
 	else if (!station_captured &&                station_was_nuked)
 		feedback_set_details("round_end_result","halfwin - everyone killed by nuke")
@@ -231,24 +231,24 @@
 	else if (!station_captured &&  malf_dead && !station_was_nuked)
 		feedback_set_details("round_end_result","loss - staff win")
 		world << "<FONT size = 3><B>Human Victory</B></FONT>"
-		world << "<B>The AI has been destroyed!</B> The staff is victorious."
+		world << "<B>The AI has been killed!</B> The staff is victorious."
 
 	else if (!station_captured && !malf_dead && !station_was_nuked && crew_evacuated)
 		feedback_set_details("round_end_result","halfwin - evacuated")
 		world << "<FONT size = 3><B>Neutral Victory</B></FONT>"
-		world << "<B>The Corporation has lost [station_name()]! All surviving personnel will be fired, effective immediately!</B>"
+		world << "<B>The Corporation has lose [station_name()]! All survived personnel will be fired!</B>"
 
 	else if (!station_captured && !malf_dead && !station_was_nuked && !crew_evacuated)
 		feedback_set_details("round_end_result","nalfwin - interrupted")
 		world << "<FONT size = 3><B>Neutral Victory</B></FONT>"
-		world << "<B>The round was mysteriously interrupted!</B>"
+		world << "<B>Round was mysteriously interrupted!</B>"
 	..()
 	return 1
 
 
 /datum/game_mode/proc/auto_declare_completion_malfunction()
 	if( malf_ai.len || istype(ticker.mode,/datum/game_mode/malfunction) )
-		var/text = "<FONT size = 2><B>The malfunctioning AI was:</B></FONT>"
+		var/text = "<FONT size = 2><B>The malfunctioning AI were:</B></FONT>"
 
 		for(var/datum/mind/malf in malf_ai)
 
