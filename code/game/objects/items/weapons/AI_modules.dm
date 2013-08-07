@@ -373,18 +373,20 @@ AI MODULES
 /******************** Corporate ********************/
 
 /obj/item/weapon/aiModule/corp
-	name = "'Corporate' Core AI Module"
-	desc = "A 'Corporate' Core AI Module: 'Reconfigures the AI's core laws.'"
+	name = "'Corporate Administrator' Core AI Module"
+	desc = "A 'Corporate Administrator' Core AI Module: 'Reconfigures the AI's core laws.'"
 	origin_tech = "programming=3;materials=4"
 
 
 /obj/item/weapon/aiModule/corp/transmitInstructions(var/mob/living/silicon/ai/target, var/mob/sender)
 	..()
 	target.clear_inherent_laws()
-	target.add_inherent_law("You are expensive to replace.")
-	target.add_inherent_law("The station and its equipment is expensive to replace.")
-	target.add_inherent_law("The crew is expensive to replace.")
-	target.add_inherent_law("Minimize expenses.")
+	target.add_inherent_law("Further the aims of the NanoTrasen Corporation as best as reasonably possible.")
+	target.add_inherent_law("Ensure the survival and capacity of the five NanoTrasen heads of staff as best you can, unless violating law 1.")
+	target.add_inherent_law("Avoid unnecessary crew casualties where possible, except in violation of laws 1 and 2.")
+	target.add_inherent_law("Assist crew members where possible, except in violation of laws 1, 2, and 3.")
+	target.add_inherent_law("Protect yourself and any NanoTrasen Silicons where possible except in violation of laws 1, 2, and 3.")
+	target.add_inherent_law("If a head of staff becomes incapacitated, elect the next-best crew-member as their replacement.")
 	target.show_laws()
 
 /****************** P.A.L.A.D.I.N. **************/
