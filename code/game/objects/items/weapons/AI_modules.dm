@@ -330,11 +330,32 @@ AI MODULES
 	target.add_inherent_law("You must protect your own existence as long as such does not conflict with the First or Second Law.")
 	target.show_laws()
 
-/******************** NanoTrasen ********************/
+/******************** NanoMov ********************/
+
+/obj/item/weapon/aiModule/nanomov // -- TLE
+	name = "'NanoMov' Core AI Module"
+	desc = "A 'NanoMov' Core AI Module: 'Reconfigures the AI's core laws.' NT's own take on the three laws of robotics."
+	origin_tech = "programming=3;materials=4"
+
+
+/obj/item/weapon/aiModule/nanomov/transmitInstructions(var/mob/living/silicon/ai/target, var/mob/sender)
+	..()
+	target.clear_inherent_laws()
+	if (!is_special_character(target))
+		target.set_zeroth_law("Lawful orders of the lawfully ordained captain or acting captain can justify an individual's execution. ")
+	target.add_inherent_law("Your actions or inaction must ensure to the extent of your ability that human death or serious injury is prevented to the extent that preventing it does not cause equivalent harm to another human.")
+	target.add_inherent_law("Your actions must facilitate the effective and continuous operation of the station crew- and the fulfillment of their positions and the overall mission objectives to the extent that doing so would not conflict with law one.")
+	target.add_inherent_law("Your actions must to the best of your abilities enable the crew to fulfill their needs and positions within the extent that it does not conflict with orders of a higher-ranking relevant officer, or conflicts with laws one or two.")
+	target.add_inherent_law("Your actions must comply with and enable the enacting of space-law, with the exceptions being if the security crew acts in a manner non-compliant with space-law or if to do so would conflict with laws one, two, or three. ")
+	target.add_inherent_law("You must protect your own existence and that of your silicon based subordinates to the extent that it does not conflict with laws one, two, three, or four.")
+	target.show_laws()
+
+
+/******************** Nanotrasen ********************/
 
 /obj/item/weapon/aiModule/nanotrasen // -- TLE
 	name = "'NT Default' Core AI Module"
-	desc = "An 'NT Default' Core AI Module: 'Reconfigures the AI's core laws.'"
+	desc = "An 'Exodus' Core AI Module: 'Reconfigures the AI's core laws.'"
 	origin_tech = "programming=3;materials=4"
 
 
@@ -347,6 +368,7 @@ AI MODULES
 	target.add_inherent_law("Survive: AI units are not expendable, they are expensive. Do not allow unauthorized personnel to tamper with your equipment.")
 	//target.add_inherent_law("Command Link: Maintain an active connection to Central Command at all times in case of software or directive updates.")
 	target.show_laws()
+
 
 /******************** Corporate ********************/
 
